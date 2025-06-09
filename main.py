@@ -1,7 +1,7 @@
 import logging
+from datetime import timedelta
 from requests_sse import EventSource
 import json
-from pprint import pformat
 from quixstreams import Application
 
 
@@ -14,7 +14,7 @@ def main() -> None:
 
 def connect_to_event_source(url: str, method: str):
     try:
-        with EventSource(url, method, timeout=30) as eventSource:
+        with EventSource(url, method, timedelta(seconds=1),1, timeout=30) as eventSource:
             for event in eventSource:
                 value: dict = json.loads(event.data)
                 identification: str = value.get("id")
