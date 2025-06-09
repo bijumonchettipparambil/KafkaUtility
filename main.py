@@ -33,7 +33,15 @@ def publish_event_to_kafka(key: str, created_date_time: str, public: bool = None
     repo_bytes = json.dumps(repo).encode("utf-8")
 
     with Application(broker_address="10.1.1.50:9092", loglevel="DEBUG").get_producer() as producer:
-        producer.produce(topic="GitHub-firehose", key=key.encode("utf-8"), value=repo_bytes, headers={"Public": str(public)})
+        producer.produce(
+            topic="GitHub-firehose",
+            key=key.encode("utf-8"),
+            value=repo_bytes,
+            headers={
+                "Public": str(public),
+                "created_date_time": created_date_time
+            }
+        )
 
 
 if __name__ == "__main__":
